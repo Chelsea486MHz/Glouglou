@@ -24,7 +24,7 @@ $ docker compose up -d
 version: '3'
 
 services:
-  macron:
+  glouglou:
     build: .
     environment:
       DISCORD_TOKEN: your-discord-token
@@ -37,6 +37,12 @@ services:
 ✨🐟 The `DISCORD_TOKEN` variable is the authentication token you created for your Discord app. Since Glouglou is running as a Discord bot, he needs the token! Add Glouglou to your server from the Discord developer interface, and don't forget to set the correct intents.
 
 ✨🐟 Both the `SSH_TARGET` and `SSH_SECRET` variables are related to the server you're about to hand to Glouglou. Create an SSH keypair, give it to glouglou, and give the address of his own machine he'll be controlling over SSH. Be careful! Glouglou is not bound by our human reasoning and **will** break things. Don't do something irresponsible here. Glouglou's server can be anything from a simple container somewhere in the cloud to a dedicated server in his subnet. Choose wisely!
+
+# Use Glouglou
+
+Don't forget to set Glouglou's profile picture and username on your Discord developer portal!
+
+Once you're done with that, and Glouglou is running, send him a message on Discord. He'll take things up from there :)
 
 # Reset Glouglou
 
