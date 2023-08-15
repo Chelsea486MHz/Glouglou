@@ -106,8 +106,10 @@ client.on("messageCreate", async message => {
 		}
 
 		// Response is a message to the user
-		console.log(`Sending the following message via Discord: ${response}`)
-		message.channel.send(response);
+		else {
+			console.log(`Sending the following message via Discord: ${response}`)
+			message.channel.send(response);
+		}
 	}
 });
 

@@ -25,7 +25,7 @@ $ docker compose up -d
 version: '3'
 
 services:
-  beignet:
+  app:
     build: .
     restart: unless-stopped
     environment:
@@ -38,10 +38,13 @@ services:
       - ./ssh/key:/app/key
 
   terminal:
-    image: ubuntu
+    build:
+      context: .
+      dockerfile: Dockerfile-terminal
     restart: unless-stopped
     volumes:
       - ./ssh/key.pub:/root/.ssh/authorized_keys
+      - ./ssh/config:/etc/sshd/config
 ```
 
 ✨🐟 La variable `DISCORD_TOKEN` fait référence au jeton d'authentification Discord que tu as généré sur le portail développeur de Discord. Glouglou interface avec Discord en tant que "bot", alors crée une application Discord sur ton portail avec une jolie image de profil pour Glouglou, son pseudo, et configure correctement ses intents.

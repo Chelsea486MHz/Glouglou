@@ -1,0 +1,12 @@
+FROM ubuntu:latest
+
+RUN apt update && \
+    apt install -y openssh-server
+
+RUN mkdir /run/sshd -p && \
+    chmod 0755 /run/sshd && \
+    chown root:root /run/sshd
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]
