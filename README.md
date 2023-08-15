@@ -1,16 +1,16 @@
 ![Glouglou logo](logo.png)
 
-# Your personal hacking companion, on Discord!
+# Ton compagnon de hacking personnel
 
-🐟 > Glouglou is your personal hacking companion, helping you with coding, hacking, or working with computers in general. All from the comfort of Discord!
+🐟 > Dit bonjour à Glouglou, ton compagnon de hacking personnel. Il t'aide à coder, bricoler du code, et ce depuis le comfort de Discord !
 
-🐠 > Glouglou has access to his own little machine somewhere in the cloud, where he can run commands and better help you with whatever you're doing.
+🐠 > Glouglou a accès à son propre serveur dans le cloud. Il peut y éxécuter des commandes et mieux t'aider à faire ton travail !
 
-🐡 > Using GPT-3.5 and SSH key-based authentication, Glouglou's abilities are yours to define.
+🐡 > En utilisant l'API OpenAI et une authentification par SSH, les capacités de Glouglou ne sont limitées que par ton imagination !
 
-# Installing Glouglou
+# Héberger Glouglou
 
-✨🐟 Glouglou is docker-based. If you have a server somewhere, he'll be glad to make it into his home! Your personal computer will do just fine as well. Just figure out which internet-connected machine you want him to run on, and execute the following command to bring Glouglou to life!
+✨🐟 Glouglou fonctionne avec Docker. Si tu as un serveur quelquepart, il sera ravi d'y élire domicile ! Ton ordinateur fonctionnera tout aussi bien, à toi de décider sur quelle machine disposant d'une connection internet tu souhaites le loger. Pour invoquer Glouglou sur ta machine, utilises la commande suivante :
 
 ```
 $ git clone https://github.com/Chelsea486MHz/Glouglou
@@ -18,42 +18,46 @@ $ cd Glouglou
 $ docker compose up -d
 ```
 
-✨🐟 Make sure to properly configure `docker-compose.yml` first! Here is an example configuration:
+✨🐟 Assures-toi d'avoir correctement configuré le fichier `docker-compose.yml` avant !
+
 
 ```
 version: '3'
 
 services:
-  glouglou:
+  beignet:
     build: .
+    restart: unless-stopped
     environment:
-      DISCORD_TOKEN: your-discord-token
-      OPENAI_TOKEN: your-openai-token
-      OPENAI_MODEL: gpt-3.5-turbo
-      SSH_SECRET: your-ssh-private-key
-      SSH_TARGET: your-server.tld
+      SSH_SERVER: terminal
+      SSH_USER: root
+      DISCORD_TOKEN: your-discord-app-token
+      AI_TOKEN: your-openai-api-key
+      AI_MODEL: gpt-3.5-turbo
+    volumes:
+      - ./ssh/key:/app/key
+
+  terminal:
+    image: ubuntu
+    restart: unless-stopped
+    volumes:
+      - ./ssh/key.pub:/root/.ssh/authorized_keys
 ```
 
-✨🐟 The `DISCORD_TOKEN` variable is the authentication token you created for your Discord app. Since Glouglou is running as a Discord bot, he needs the token! Add Glouglou to your server from the Discord developer interface, and don't forget to set the correct intents.
+✨🐟 La variable `DISCORD_TOKEN` fait référence au jeton d'authentification Discord que tu as généré sur le portail développeur de Discord. Glouglou interface avec Discord en tant que "bot", alors crée une application Discord sur ton portail avec une jolie image de profil pour Glouglou, son pseudo, et configure correctement ses intents.
 
-✨🐟 Both the `SSH_TARGET` and `SSH_SECRET` variables are related to the server you're about to hand to Glouglou. Create an SSH keypair, give it to glouglou, and give the address of his own machine he'll be controlling over SSH. Be careful! Glouglou is not bound by our human reasoning and **will** break things. Don't do something irresponsible here. Glouglou's server can be anything from a simple container somewhere in the cloud to a dedicated server in his subnet. Choose wisely!
+✨🐟 Les variables `SSH` font références à la machine que tu veux confier à Glouglou. Il aura la capacité d'éxécuter ce qu'il veut dessus, alors fait attention et assures-toi de savoir ce que tu fais ! Tu dois générer ta propre paire de clés dans le dossier `ssh` à la racine de ce dépôt.
 
-# Use Glouglou
+# Utiliser Glouglou
 
-Don't forget to set Glouglou's profile picture and username on your Discord developer portal!
+✨🐟 **Glouglou est magique.** Mais des fois, il se... perd dans sa tête. Si ça arrive, redémarre la conversation avec la commande `!reset` dans le chat Discord.
 
-Once you're done with that, and Glouglou is running, send him a message on Discord. He'll take things up from there :)
+# Détails techniques
 
-# Reset Glouglou
+Construit depuis [Node.js](https://nodejs.org/en).
 
-✨🐟 **Glouglou is magic!** But sometimes he can get confused in the depths of his mind. To reset Glouglou, use the `!reset` command to reset the chat history. Give the bot some time to run the pre-prompt again.
+Rendu possible par [Discord.js](https://discord.js.org/).
 
-# Technical details
-
-Built using [Node.JS](https://nodejs.org/en).
-
-Made possible with [Discord.js](https://discord.js.org/).
-
-The Docker image is based on [Alpine Linux](https://www.alpinelinux.org/).
+Image Docker basée sur [Alpine Linux](https://www.alpinelinux.org/).
 
 # 🐡🐠🐟🐳🐋🦪🪼🐙🦑🦀🦞🐧🦭🐬🪸🦈

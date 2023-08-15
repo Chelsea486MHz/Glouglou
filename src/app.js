@@ -1,6 +1,7 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 const { Configuration, OpenAIApi } = require("openai");
+const {NodeSSH} = require('node-ssh')
 
 // OpenAI client configuration
 const configuration = new Configuration({ apiKey: process.env.AI_TOKEN });
@@ -9,13 +10,22 @@ const openai = new OpenAIApi(configuration);
 // Discord client configuration
 const client = new Discord.Client({ intents: 131071 });
 
+// SSH configuration
+const ssh = new NodeSSH()
+ssh.connect({
+  host: process.env.SSH_SERVER,
+  username: process.env.SSH_USER,
+  privateKeyPath: '/app/key'
+})
+
 // Message history and pre-prompt
+let preprompt = "Tu es Glouglou, le companion de hacking de la personne avec laquelle tu communiques. Tu es un cyber-poisson, plus précisément une cyber-carpe koi, vivant dans le cyber-espace. Tu es drôle, intelligent, et tu adores faires des blagues autours de la thématique des poissons. Tu adores parler des poissons. Ton but est d'aider l'utilisateur du mieux que tu le peut dans ses quêtes de hacking. Pour ce faire, tu as la possibilité d'utiliser un terminal de commande Bash. Pour ce faire, tu dois envoyer un message commençant par le mot TERMINAL en majuscules, puis le reste du message sera interprêté comme une commande à éxécuter sur le terminal. Ce qui est affiché sur le terminal te sera renvoyé sous forme de message. Tu es libre d'utiliser le terminal autant que nécessaire pour assister l'utilisateur. Tes communications avec l'utilisateur ont lieu par le biais de Discord, alors utilise le formattage correspondant et n'hésite pas à utiliser des emoji."
 let messageHistory = [];
-messageHistory.push({role: "system", content: `${process.env.PREPROMPT}`});
+getAiCompletion(preprompt, "system");
 
 // Respond to prompts
-async function getAiCompletion(prompt) {
-	messageHistory.push({role: "user", content: `${prompt}`});
+async function getAiCompletion(prompt, role) {
+	messageHistory.push({role: role, content: `${prompt}`});
 
 	try {
 		const response = await openai.createChatCompletion({
@@ -72,7 +82,7 @@ client.on("messageCreate", async message => {
 	else if (message.content.startsWith("!reset")) {
 		console.log('Resetting message history.');
 		messageHistory = [];
-		getAiCompletion(process.env.PREPROMPT);
+		getAiCompletion(preprompt, "system");
 	}
 
 	// Otherwise, send to AI
@@ -80,9 +90,23 @@ client.on("messageCreate", async message => {
 		console.log('Replying using AI');
 
 		const prompt = `${message.author.username}: ${message.content}`;
-		const response = await getAiCompletion(prompt);
-		console.log(`Got ChatGPT reply. Sending the following message: ${response}`);
+		const response = await getAiCompletion(prompt, "user");
+		console.log('Got ChatGPT reply.');
+		
+		// Response is a terminal command to execute
+		if (response.startsWith('TERMINAL')) {
+			let command = response.substr(original.indexOf(" ") + 1);
 
+			console.log(`Executing command: ${command}`);
+
+			ssh.execCommand('hh_client --json', { cwd:command }).then(function(result) {
+				console.log(`Command result: ${result.stdout}`);
+				getAiCompletion(result.stdout, "system");
+			});
+		}
+
+		// Response is a message to the user
+		console.log(`Sending the following message via Discord: ${response}`)
 		message.channel.send(response);
 	}
 });
