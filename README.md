@@ -31,6 +31,7 @@ services:
     environment:
       SSH_SERVER: terminal
       SSH_USER: root
+      SSH_PASSWORD: root
       DISCORD_TOKEN: your-discord-app-token
       AI_TOKEN: your-openai-api-key
       AI_MODEL: gpt-3.5-turbo
@@ -43,8 +44,7 @@ services:
       dockerfile: Dockerfile-terminal
     restart: unless-stopped
     volumes:
-      - ./ssh/key.pub:/root/.ssh/authorized_keys
-      - ./ssh/config:/etc/sshd/config
+      - ./ssh/config:/tmp/ssh/config
 ```
 
 ✨🐟 La variable `DISCORD_TOKEN` fait référence au jeton d'authentification Discord que tu as généré sur le portail développeur de Discord. Glouglou interface avec Discord en tant que "bot", alors crée une application Discord sur ton portail avec une jolie image de profil pour Glouglou, son pseudo, et configure correctement ses intents.
