@@ -5,8 +5,9 @@ RUN apt update && \
 
 RUN mkdir /run/sshd -p && \
     chmod 0755 /run/sshd && \
-    chown root:root /run/sshd
+    chown root:root /run/sshd && \
+    echo 'root:root' | chpasswd
 
 EXPOSE 22
 
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["/usr/sbin/sshd", "-D", "-f", "/tmp/ssh/config"]

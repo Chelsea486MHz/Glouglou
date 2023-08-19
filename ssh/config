@@ -1,7 +1,5 @@
 Port 22
-PasswordAuthentication no
-ChallengeResponseAuthentication no
-PermitRootLogin prohibit-password
-AuthenticationMethods publickey
-AuthorizedKeysFile /root/.ssh/authorized_keys
-UseDNS no
+Protocol 2
+PermitRootLogin yes
+PasswordAuthentication yes
+AllowUsers root
